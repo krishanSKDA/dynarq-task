@@ -35,6 +35,8 @@ def parse_date(value):
 def _is_valid_amount(amount):
     if isinstance(amount, bool) or not isinstance(amount, (int, float)):
         return False
+    if isinstance(amount, int):
+        return amount > 0
     return math.isfinite(amount) and amount > 0
 
 
@@ -135,7 +137,7 @@ def read_json_list(path, label):
         raise PlanInputError(f"{label} file not found: {path}")
     except OSError as e:
         raise PlanInputError(f"cannot read {label} file {path}: {e.strerror or e}")
-    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+    except (ValueError, RecursionError) as e:
         raise PlanInputError(f"{label} file {path} is not valid JSON: {e}")
     if not isinstance(data, list) or not all(isinstance(item, dict) for item in data):
         raise PlanInputError(f"{label} file {path} must be a JSON list of objects")

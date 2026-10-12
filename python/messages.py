@@ -1,5 +1,7 @@
 import re
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import ROUND_HALF_UP, Context, Decimal
+
+_WIDE = Context(prec=5000)
 
 TEMPLATES = {
     "friendly": (
@@ -33,7 +35,8 @@ FORBIDDEN_WORDS = ("fee", "interest", "penalty", "charge", "compensation", "%",
 
 
 def format_amount(amount, currency):
-    value = Decimal(repr(float(amount))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    exact = Decimal(amount) if isinstance(amount, int) else Decimal(repr(float(amount)))
+    value = exact.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP, context=_WIDE)
     return f"{currency} {value:,.2f}"
 
 

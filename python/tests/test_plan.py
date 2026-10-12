@@ -169,7 +169,7 @@ class BadDataTest(unittest.TestCase):
         self.assertEqual(reasons(plan([invoice])), [("INV-1", "invalid_amount")])
 
     def test_integer_and_small_amounts_are_valid(self):
-        for good in [100, 0.01]:
+        for good in [100, 0.01, 10 ** 400]:
             with self.subTest(amount=good):
                 self.assertEqual(plan([inv(amount=good)])["skipped"], [])
 

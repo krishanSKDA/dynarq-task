@@ -18,6 +18,8 @@ class FormatAmountTest(unittest.TestCase):
             (100, "GBP", "GBP 100.00"),
             (0.125, "EUR", "EUR 0.13"),
             (1234567.891, "EUR", "EUR 1,234,567.89"),
+            (1e30, "EUR", "EUR 1,000,000,000,000,000,000,000,000,000,000.00"),
+            (10 ** 30, "EUR", "EUR 1,000,000,000,000,000,000,000,000,000,000.00"),
         ]
         for amount, currency, expected in cases:
             with self.subTest(amount=amount):
